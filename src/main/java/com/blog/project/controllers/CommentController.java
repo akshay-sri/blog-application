@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     @Autowired
     private CommentService commentService;
+
     @PostMapping("user/{userId}/post/{postId}/comments")
     public ResponseEntity<CommentDto> createComment(
             @RequestBody CommentDto commentDto,
             @PathVariable Integer userId,
-            @PathVariable Integer postId){
-        CommentDto createComment=this.commentService.createComment(commentDto,userId,postId);
+            @PathVariable Integer postId) {
+        CommentDto createComment = this.commentService.createComment(commentDto, userId, postId);
         return new ResponseEntity<CommentDto>(createComment, HttpStatus.CREATED);
     }
+
     @DeleteMapping("/comments/delete/{commentId}")
-    public ResponseEntity<ApiResponse> deleteComment(@PathVariable Integer commentId){
+    public ResponseEntity<ApiResponse> deleteComment(@PathVariable Integer commentId) {
         this.commentService.deleteComment(commentId);
-        return new ResponseEntity(new ApiResponse("Comment deleted successfully",true),HttpStatus.OK);
+        return new ResponseEntity(new ApiResponse("Comment deleted successfully", true), HttpStatus.OK);
     }
 }

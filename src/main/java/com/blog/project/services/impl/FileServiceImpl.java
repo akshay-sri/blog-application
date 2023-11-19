@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+
 @Service
 public class FileServiceImpl implements FileService {
 
@@ -27,8 +28,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public InputStream getResource(String path, String fileName) throws FileNotFoundException {
-        String fullPath=path+File.separator+fileName;
-        InputStream inputStream=new FileInputStream(fullPath);
+        String fullPath = path + File.separator + fileName;
+        InputStream inputStream = new FileInputStream(fullPath);
         return inputStream;
     }
 }

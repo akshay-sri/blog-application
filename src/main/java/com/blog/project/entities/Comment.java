@@ -1,14 +1,12 @@
 package com.blog.project.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name="comments")
-@Getter
-@Setter
+@Table(name = "comments")
+@Data
 @NoArgsConstructor
 public class Comment {
     @Id
@@ -16,9 +14,9 @@ public class Comment {
     private int id;
     private String content;
     @ManyToOne
-    @JoinColumn(name="postId")
+    @JoinColumn(name = "postId")
     private Post post;
     @ManyToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name = "userId")
     private User user;
 }

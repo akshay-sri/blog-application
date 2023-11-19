@@ -31,29 +31,29 @@ public class PostController {
     @Value("${project.image}")
     private String path;
 
-    @PostMapping("/user/{userId}/category/{categoryId}/posts")
+    @PostMapping("/users/{userId}/categories/{catId}/posts")
     public ResponseEntity<PostDto> createPost(
             @Valid @RequestBody PostDto postDto,
             @PathVariable Integer userId,
-            @PathVariable Integer categoryId
+            @PathVariable Integer catId
     ) {
-        PostDto createPost = this.postService.createPost(postDto, userId, categoryId);
+        PostDto createPost = this.postService.createPost(postDto, userId, catId);
         return new ResponseEntity<PostDto>(createPost, HttpStatus.CREATED);
     }
 
-    @GetMapping("/user/{userId}/posts")
+    @GetMapping("/users/{userId}/posts")
     public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId) {
         List<PostDto> posts = this.postService.getPostsByUser(userId);
         return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
     }
 
-    @GetMapping("/category/{categoryId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId) {
-        List<PostDto> posts = this.postService.getPostsByCategory(categoryId);
+    @GetMapping("/categories/{catId}/posts")
+    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer catId) {
+        List<PostDto> posts = this.postService.getPostsByCategory(catId);
         return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
     }
 
-    @GetMapping("/getAllPost")
+    @GetMapping("/posts")
     public ResponseEntity<PostResponse> getPost(
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
@@ -64,31 +64,31 @@ public class PostController {
         return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/getPost/{postId}")
+    @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId) {
         PostDto postDto = this.postService.getPostById(postId);
         return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/post/delete/{postId}")
+    @DeleteMapping("/posts/delete/{postId}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId) {
         this.postService.deletePost(postId);
         return new ResponseEntity(new ApiResponse("Post deleted successfully", true), HttpStatus.OK);
     }
 
-    @PutMapping("/post/update/{postId}")
+    @PutMapping("/posts/update/{postId}")
     public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable(name = "postId") Integer pId) {
         PostDto updatePostDto = this.postService.updatePost(postDto, pId);
         return ResponseEntity.ok(updatePostDto);
     }
 
-    @GetMapping("/post/search/{keyword}")
+    @GetMapping("/posts/search/{keyword}")
     public ResponseEntity<List<PostDto>> searchPostByKeyword(@PathVariable String keyword) {
         List<PostDto> response = this.postService.searchPosts(keyword);
         return new ResponseEntity<List<PostDto>>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/post/imageUpload/{postId}")
+    @PostMapping("/posts/imageUpload/{postId}")
     public ResponseEntity<PostDto> uploadPostImage(
             @RequestParam("image") MultipartFile image,
             @PathVariable Integer postId) throws IOException {
@@ -99,7 +99,7 @@ public class PostController {
         return new ResponseEntity<PostDto>(updatedPost, HttpStatus.OK);
     }
 
-    @GetMapping(value = "post/imageDownload/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "posts/imageDownload/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public void downloadImage(
             @PathVariable String imageName, HttpServletResponse response) throws IOException {
         InputStream resource = this.fileService.getResource(path, imageName);

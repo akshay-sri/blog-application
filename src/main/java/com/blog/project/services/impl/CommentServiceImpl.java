@@ -42,6 +42,5 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = this.commentRepo.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment", " id ", commentId));
         this.commentRepo.delete(comment);
-
     }
 }

@@ -13,37 +13,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create")
+    @PostMapping("/categories/create")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         CategoryDto createCategoryDto = this.categoryService.createCategory(categoryDto);
         return new ResponseEntity<>(createCategoryDto, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/update/{catId}")
+    @PutMapping("/categories/update/{catId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable(name = "catId") Integer cId) {
         CategoryDto updateCategoryDto = this.categoryService.updateCategory(categoryDto, cId);
         return ResponseEntity.ok(updateCategoryDto);
     }
 
-    @GetMapping("getCategory/{catId}")
+    @GetMapping("/categories/{catId}")
     public ResponseEntity<CategoryDto> getUserById(@PathVariable(name = "catId") Integer cId) {
         return ResponseEntity.ok(this.categoryService.getCategoryById(cId));
     }
 
-    @GetMapping("/getAllCategory")
+    @GetMapping("/categories")
     public ResponseEntity<List<CategoryDto>> getCategory() {
         return ResponseEntity.ok(this.categoryService.getAllCategories());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete/{catId}")
+    @DeleteMapping("/categories/delete/{catId}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable(name = "catId") Integer cId) {
         this.categoryService.deleteCategory(cId);
         return new ResponseEntity(new ApiResponse("Category deleted successfully", true), HttpStatus.OK);

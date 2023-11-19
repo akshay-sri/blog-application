@@ -1,5 +1,6 @@
 package com.blog.project.controllers;
 
+import com.blog.project.entities.Comment;
 import com.blog.project.payloads.ApiResponse;
 import com.blog.project.payloads.CommentDto;
 import com.blog.project.services.CommentService;
@@ -14,18 +15,16 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @PostMapping("user/{userId}/post/{postId}/comments")
-    public ResponseEntity<CommentDto> createComment(
-            @RequestBody CommentDto commentDto,
-            @PathVariable Integer userId,
-            @PathVariable Integer postId) {
+    @PostMapping("/users/{userId}/posts/{postId}/comments")
+    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto
+            , @PathVariable Integer userId, @PathVariable Integer postId) {
         CommentDto createComment = this.commentService.createComment(commentDto, userId, postId);
         return new ResponseEntity<CommentDto>(createComment, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/comments/delete/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<ApiResponse> deleteComment(@PathVariable Integer commentId) {
         this.commentService.deleteComment(commentId);
-        return new ResponseEntity(new ApiResponse("Comment deleted successfully", true), HttpStatus.OK);
+        return new ResponseEntity<ApiResponse>(new ApiResponse("Comment deleted successfully", true), HttpStatus.OK);
     }
 }

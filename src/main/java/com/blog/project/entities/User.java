@@ -1,8 +1,9 @@
 package com.blog.project.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,8 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class User implements UserDetails {
 
     @Id

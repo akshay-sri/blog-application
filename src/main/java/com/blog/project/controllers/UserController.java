@@ -13,37 +13,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create")
+    @PostMapping("/users/create")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         UserDto createUserDto = this.userService.createUser(userDto);
         return new ResponseEntity<>(createUserDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/users/update/{userId}")
     public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable(name = "userId") Integer uId) {
         UserDto updateUserDto = this.userService.updateUser(userDto, uId);
         return ResponseEntity.ok(updateUserDto);
     }
 
-    @GetMapping("getUser/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable(name = "userId") Integer uId) {
         return ResponseEntity.ok(this.userService.getUserById(uId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/getAllUser")
+    @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUser() {
         return ResponseEntity.ok(this.userService.getAllUsers());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete/{userId}")
+    @DeleteMapping("/users/delete/{userId}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable(name = "userId") Integer uId) {
         this.userService.deleteUser(uId);
         return new ResponseEntity(new ApiResponse("User deleted successfully", true), HttpStatus.OK);

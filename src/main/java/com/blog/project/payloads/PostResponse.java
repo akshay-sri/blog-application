@@ -1,12 +1,14 @@
 package com.blog.project.payloads;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class PostResponse {
     private List<PostDto> postList;
     private int pageNumber;

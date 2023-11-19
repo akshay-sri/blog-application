@@ -1,19 +1,15 @@
 package com.blog.project.payloads;
 
-import com.blog.project.entities.Comment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class PostDto {
     private int postId;
@@ -27,5 +23,5 @@ public class PostDto {
     private Date addedDate;
     private CategoryDto category;
     private UserDto user;
-    private Set<CommentDto>comments=new HashSet<>();
+    private Set<CommentDto> comments = new HashSet<>();
 }

@@ -1,25 +1,38 @@
 package com.blog.project.services.impl;
 
+import com.blog.project.config.AppConstants;
+import com.blog.project.entities.Role;
 import com.blog.project.entities.User;
 import com.blog.project.exceptions.ResourceNotFoundException;
 import com.blog.project.payloads.UserDto;
+import com.blog.project.repositories.RoleRepo;
 import com.blog.project.repositories.UserRepo;
 import com.blog.project.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepo roleRepo;
+
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = this.dtoToUser(userDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role role = this.roleRepo.findById(AppConstants.ADMIN_USER).get();
+        user.getRoles().add(role);
         User savedUser = this.userRepo.save(user);
         return this.userToDto(savedUser);
     }
@@ -27,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto userDto, Integer userId) {
         User user = this.userRepo.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User"," id ",userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", " id ", userId));
 
         user.setUserName(userDto.getUserName());
         user.setEmail(userDto.getEmail());
@@ -40,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(Integer userId) {
         User user = this.userRepo.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User"," id ",userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", " id ", userId));
         return this.userToDto(user);
     }
 
@@ -53,12 +66,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Integer userId) {
-       User user = this.userRepo.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User"," id ",userId));
-       this.userRepo.delete(user);
+        User user = this.userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", " id ", userId));
+        this.userRepo.delete(user);
     }
-    public User dtoToUser(UserDto userDto){
-        User user = this.modelMapper.map(userDto,User.class);
+
+    public User dtoToUser(UserDto userDto) {
+        User user = this.modelMapper.map(userDto, User.class);
 //        user.setId(userDto.getId());
 //        user.setName(userDto.getName());
 //        user.setEmail(userDto.getEmail());
@@ -66,13 +80,24 @@ public class UserServiceImpl implements UserService {
 //        user.setPassword(userDto.getPassword());
         return user;
     }
-    public UserDto userToDto(User user){
-        UserDto userDto = this.modelMapper.map(user,UserDto.class);
+
+    public UserDto userToDto(User user) {
+        UserDto userDto = this.modelMapper.map(user, UserDto.class);
 //        userDto.setId(user.getId());
 //        userDto.setName(user.getName());
 //        userDto.setEmail(user.getEmail());
 //        userDto.setAbout(user.getAbout());
 //        userDto.setPassword(user.getPassword());
         return userDto;
+    }
+
+    @Override
+    public UserDto registerUser(UserDto userDto) {
+        User user = this.modelMapper.map(userDto, User.class);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+        user.getRoles().add(role);
+        User newUser = this.userRepo.save(user);
+        return this.modelMapper.map(newUser, UserDto.class);
     }
 }

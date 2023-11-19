@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         UserDto createUserDto = this.userService.createUser(userDto);
@@ -34,11 +36,13 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getUserById(uId));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllUser")
     public ResponseEntity<List<UserDto>> getUser() {
         return ResponseEntity.ok(this.userService.getAllUsers());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable(name = "userId") Integer uId) {
         this.userService.deleteUser(uId);

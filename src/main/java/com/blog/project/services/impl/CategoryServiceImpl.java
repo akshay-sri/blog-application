@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, Integer catId) {
         Category category = this.categoryRepo.findById(catId)
-                .orElseThrow(()-> new ResourceNotFoundException("Category"," id ",catId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", " id ", catId));
 
         category.setCatDesc(categoryDto.getCatDesc());
         category.setCatDesc(categoryDto.getCatDesc());
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryById(Integer catId) {
         Category category = this.categoryRepo.findById(catId)
-                .orElseThrow(()-> new ResourceNotFoundException("Category"," id ",catId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", " id ", catId));
         return this.categoryToDto(category);
 
     }
@@ -55,15 +55,17 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Integer catId) {
         Category category = this.categoryRepo.findById(catId)
-                .orElseThrow(()-> new ResourceNotFoundException("Category"," id ",catId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", " id ", catId));
         this.categoryRepo.delete(category);
     }
-    public Category dtoToCategory(CategoryDto categoryDto){
-        Category category = this.modelMapper.map(categoryDto,Category.class);
+
+    public Category dtoToCategory(CategoryDto categoryDto) {
+        Category category = this.modelMapper.map(categoryDto, Category.class);
         return category;
     }
-    public CategoryDto categoryToDto(Category category){
-        CategoryDto categoryDto = this.modelMapper.map(category,CategoryDto.class);
+
+    public CategoryDto categoryToDto(Category category) {
+        CategoryDto categoryDto = this.modelMapper.map(category, CategoryDto.class);
         return categoryDto;
     }
 }

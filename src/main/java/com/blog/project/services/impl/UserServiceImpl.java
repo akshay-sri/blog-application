@@ -29,12 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = this.dtoToUser(userDto);
+        User user = this.modelMapper.map(userDto, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = this.roleRepo.findById(AppConstants.ADMIN_USER).get();
         user.getRoles().add(role);
         User savedUser = this.userRepo.save(user);
-        return this.userToDto(savedUser);
+        return this.modelMapper.map(savedUser, UserDto.class);
     }
 
     @Override
@@ -47,20 +47,20 @@ public class UserServiceImpl implements UserService {
         user.setPassword(userDto.getPassword());
         user.setAbout(userDto.getAbout());
         User updatedUser = this.userRepo.save(user);
-        return this.userToDto(updatedUser);
+        return this.modelMapper.map(updatedUser, UserDto.class);
     }
 
     @Override
     public UserDto getUserById(Integer userId) {
         User user = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", " id ", userId));
-        return this.userToDto(user);
+        return this.modelMapper.map(user, UserDto.class);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = this.userRepo.findAll();
-        List<UserDto> userDtos = users.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
+        List<UserDto> userDtos = users.stream().map(user -> this.modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
         return userDtos;
     }
 
@@ -69,26 +69,6 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", " id ", userId));
         this.userRepo.delete(user);
-    }
-
-    public User dtoToUser(UserDto userDto) {
-        User user = this.modelMapper.map(userDto, User.class);
-//        user.setId(userDto.getId());
-//        user.setName(userDto.getName());
-//        user.setEmail(userDto.getEmail());
-//        user.setAbout(userDto.getAbout());
-//        user.setPassword(userDto.getPassword());
-        return user;
-    }
-
-    public UserDto userToDto(User user) {
-        UserDto userDto = this.modelMapper.map(user, UserDto.class);
-//        userDto.setId(user.getId());
-//        userDto.setName(user.getName());
-//        userDto.setEmail(user.getEmail());
-//        userDto.setAbout(user.getAbout());
-//        userDto.setPassword(user.getPassword());
-        return userDto;
     }
 
     @Override

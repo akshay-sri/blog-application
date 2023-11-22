@@ -4,6 +4,7 @@ import com.blog.project.entities.Comment;
 import com.blog.project.payloads.ApiResponse;
 import com.blog.project.payloads.CommentDto;
 import com.blog.project.services.CommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Comment")
 public class CommentController {
     @Autowired
     private CommentService commentService;

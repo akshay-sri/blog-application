@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         email = "kingakshay595@gmail.com",
                         url = "https://www.youtube.com/playlist?list=PL0zysOflRCen-GihOcm1hZfYAlwr63K_M"
                 ),
-                description = "Swagger documentation for Spring Security",
+                description = "Swagger documentation for Blog Application",
                 title = "Swagger specification - Akshay",
                 version = "1.0",
                 license = @License(

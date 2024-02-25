@@ -3,7 +3,9 @@ package com.blog.project.services.impl;
 import com.blog.project.config.AppConstants;
 import com.blog.project.entities.Role;
 import com.blog.project.entities.User;
+import com.blog.project.exceptions.AlreadyExistsException;
 import com.blog.project.exceptions.ResourceNotFoundException;
+import com.blog.project.payloads.ApiResponse;
 import com.blog.project.payloads.UserDto;
 import com.blog.project.repositories.RoleRepo;
 import com.blog.project.repositories.UserRepo;
@@ -28,13 +30,19 @@ public class UserServiceImpl implements UserService {
     private RoleRepo roleRepo;
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        User user = this.modelMapper.map(userDto, User.class);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = this.roleRepo.findById(AppConstants.ADMIN_USER).get();
-        user.getRoles().add(role);
-        User savedUser = this.userRepo.save(user);
-        return this.modelMapper.map(savedUser, UserDto.class);
+    public ApiResponse createUser(UserDto userDto) {
+        if(userRepo.findByEmail(userDto.getEmail())==null) {
+            User user = this.modelMapper.map(userDto, User.class);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            Role role = this.roleRepo.findById(AppConstants.ADMIN_USER).get();
+            user.getRoles().add(role);
+            User savedUser = this.userRepo.save(user);
+            this.modelMapper.map(savedUser, UserDto.class);
+            return new ApiResponse("Admin registered!",true);
+        }
+        else{
+            throw new AlreadyExistsException("User", " id ", userDto.getEmail());
+        }
     }
 
     @Override
@@ -72,12 +80,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto registerUser(UserDto userDto) {
-        User user = this.modelMapper.map(userDto, User.class);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
-        user.getRoles().add(role);
-        User newUser = this.userRepo.save(user);
-        return this.modelMapper.map(newUser, UserDto.class);
+    public ApiResponse registerUser(UserDto userDto) {
+        if(userRepo.findByEmail(userDto.getEmail())==null) {
+            User user = this.modelMapper.map(userDto, User.class);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+            user.getRoles().add(role);
+            User newUser = this.userRepo.save(user);
+            this.modelMapper.map(newUser, UserDto.class);
+            return new ApiResponse("User registered!",true);
+        }
+        else{
+            throw new AlreadyExistsException("User", " email ", userDto.getEmail());
+        }
     }
 }

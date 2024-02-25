@@ -1,13 +1,14 @@
 package com.blog.project.services;
 
+import com.blog.project.payloads.ApiResponse;
 import com.blog.project.payloads.UserDto;
 
 import java.util.List;
 
 public interface UserService {
-    UserDto registerUser(UserDto user);
+    ApiResponse registerUser(UserDto user);
 
-    UserDto createUser(UserDto user);
+    ApiResponse createUser(UserDto user);
 
     UserDto updateUser(UserDto user, Integer userId);
 

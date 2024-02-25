@@ -1,6 +1,7 @@
 package com.blog.project.controllers;
 
 import com.blog.project.exceptions.ApiException;
+import com.blog.project.payloads.ApiResponse;
 import com.blog.project.payloads.JwtAuthRequest;
 import com.blog.project.payloads.JwtAuthResponse;
 import com.blog.project.payloads.UserDto;
@@ -56,10 +57,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(
+    public ResponseEntity<ApiResponse> registerUser(
             @RequestBody UserDto userDto
     ) {
-        UserDto newUser = this.userService.registerUser(userDto);
-        return new ResponseEntity<UserDto>(newUser, HttpStatus.CREATED);
+        ApiResponse apiResponse = this.userService.registerUser(userDto);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.CREATED);
     }
 }

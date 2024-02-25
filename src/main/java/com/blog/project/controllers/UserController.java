@@ -3,6 +3,8 @@ package com.blog.project.controllers;
 import com.blog.project.payloads.ApiResponse;
 import com.blog.project.payloads.UserDto;
 import com.blog.project.services.UserService;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,10 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/users/create")
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
-        UserDto createUserDto = this.userService.createUser(userDto);
-        return new ResponseEntity<>(createUserDto, HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserDto userDto) {
+        ApiResponse apiResponse = this.userService.createUser(userDto);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.CREATED);
     }
-
     @PutMapping("/users/update/{userId}")
     public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable(name = "userId") Integer uId) {
         UserDto updateUserDto = this.userService.updateUser(userDto, uId);
